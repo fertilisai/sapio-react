@@ -1,0 +1,41 @@
+export const settings = [
+  {
+    label: "API Key",
+    name: "api-key",
+    type: "password",
+    value: "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+  },
+  {
+    label: "Model",
+    name: "select-model",
+    type: "dropdown",
+    value: ["gpt-3.5-turbo", "gpt-4", "gpt-4-32k"],
+  },
+  {
+    label: "Max tokens",
+    name: "max-tokens",
+    type: "number",
+    value: 2048,
+    min: 0,
+    max: 2048,
+    step: 128,
+  },
+  {
+    label: "Temperature",
+    name: "temperature",
+    type: "number",
+    value: 0.7,
+    min: 0,
+    max: 2,
+    step: 0.1,
+  },
+  {
+    label: "Top P",
+    name: "top-p",
+    type: "number",
+    value: 1,
+    min: 0,
+    max: 1,
+    step: 0.1,
+  },
+];

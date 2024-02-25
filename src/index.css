@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.container-fluid {
+  display: flex;
+}
+.left {
+  flex: 1;
+  width: 400px;
+  flex-shrink: 0;
+}
+.right {
+  flex: 1;
+  flex-shrink: 0;
+}
+.main {
+  flex-grow: 2;
+  min-width: 650px;
+}
