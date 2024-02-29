@@ -1,4 +1,4 @@
-export const convoList = [
+export const convoLists = [
   {
     title: "Explain quantum computing",
     date: "12 Mar",
@@ -48,6 +48,16 @@ export const convoList = [
       { role: "system", content: "You are a helpful assistant." },
       { role: "user", content: "Hello!" },
       { role: "assistant", content: "How can I help you?" },
+      { role: "user", content: "What is the height of the eiffel tower?" },
+      { role: "assistant", content: "about 330m " },
+      { role: "user", content: "How many stairs to the top?" },
+      { role: "assistant", content: "Fuck me right?" },
+      { role: "user", content: "Hello!" },
+      { role: "assistant", content: "How can I help you?" },
+      { role: "user", content: "What is the height of the eiffel tower?" },
+      { role: "assistant", content: "about 330m " },
+      { role: "user", content: "How many stairs to the top?" },
+      { role: "assistant", content: "Fuck me right?" },
     ],
   },
 ];

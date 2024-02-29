@@ -115,7 +115,7 @@ export default function RightSidebar() {
               placeholder="1"
             />
             <br />
-            <Button label="Save changes" />
+            <Button label="Save changes" takeAction={undefined} />
           </div>
         </div>
       </aside>

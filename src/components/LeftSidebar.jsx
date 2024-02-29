@@ -1,6 +1,5 @@
 import Button from "./Button.jsx";
 import ConvoList from "./ConvoList.jsx";
-import { convoList } from "../data/convoList.js";
 
 export default function LeftSidebar(props) {
   const unselected =
@@ -17,15 +16,18 @@ export default function LeftSidebar(props) {
       </div>
 
       <div className="mx-2 mt-8 space-y-4">
-        <Button label="New chat" />
+        <Button label="New chat" takeAction={props.handleNewChat} />
 
-        {convoList.map((el, key) => {
+        {/* //myArray.toReversed().map */}
+        {props.convoList.map((el, key) => {
           return (
             <ConvoList
               className={props.selectedConvo === key ? selected : unselected}
               title={el.title}
               date={el.date}
+              key={key}
               onClick={() => props.handleSelect(key)}
+              onDelete={() => props.handleDelete(key)}
             />
           );
         })}

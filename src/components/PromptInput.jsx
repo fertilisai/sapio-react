@@ -1,6 +1,22 @@
-export default function PromptInput() {
+import { useState } from "react";
+
+export default function PromptInput({ onNewPrompt }) {
+  const [prompt, setPrompt] = useState("");
+
+  // Handle form submission
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (prompt) {
+      onNewPrompt(prompt);
+      setPrompt("");
+    }
+  };
+
   return (
-    <form className="flex w-full items-center rounded-b-md border-t border-slate-300 bg-slate-200 p-2 dark:border-slate-700 dark:bg-slate-900">
+    <form
+      onSubmit={handleSubmit}
+      className="flex w-full items-center border-t border-slate-300 bg-slate-200 p-2 dark:border-slate-700 dark:bg-slate-900"
+    >
       <label for="chat-input" className="sr-only">
         Enter your prompt
       </label>
@@ -32,6 +48,8 @@ export default function PromptInput() {
         rows="1"
         className="mx-2 flex min-h-full w-full rounded-md border border-slate-300 bg-slate-50 p-2 text-base text-slate-900 placeholder-slate-400 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-50 dark:placeholder-slate-400 dark:focus:border-blue-600 dark:focus:ring-blue-600"
         placeholder="Enter your prompt"
+        value={prompt}
+        onChange={(e) => setPrompt(e.target.value)}
       ></textarea>
       <div>
         <button
