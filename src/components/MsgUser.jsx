@@ -1,4 +1,4 @@
-export default function UserMsg(props) {
+export default function MsgUser(props) {
   return (
     <div className="flex flex-row px-4 py-8 sm:px-6">
       <img

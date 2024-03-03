@@ -1,4 +1,4 @@
-export default function AssistantMsg(props) {
+export default function MsgAssistant(props) {
   return (
     <div className="flex bg-slate-100 px-4 py-8 dark:bg-slate-900 sm:px-6">
       <img

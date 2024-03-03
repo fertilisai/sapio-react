@@ -18,7 +18,6 @@ export default function LeftSidebar(props) {
       <div className="mx-2 mt-8 space-y-4">
         <Button label="New chat" takeAction={props.handleNewChat} />
 
-        {/* //myArray.toReversed().map */}
         {props.convoList.map((el, key) => {
           return (
             <ConvoList

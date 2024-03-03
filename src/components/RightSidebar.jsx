@@ -1,6 +1,46 @@
 import Button from "./Button.jsx";
+import InputKey from "./InputKey.jsx";
+import InputNum from "./InputNum.jsx";
+import InputSelect from "./InputSelect.jsx";
+import { useLocalStorage } from "../hooks/useStorage.js";
+import { useState } from "react";
 
 export default function RightSidebar() {
+  // Original state from localStorage
+  const [apiStored, setApi, removeApi] = useLocalStorage("api", "OpenAI");
+  const [apiKeyStored, setApiKey, removeApiKey] = useLocalStorage(
+    "api-key",
+    undefined
+  );
+  const [modelStored, setModel, removeModel] = useLocalStorage(
+    "model",
+    "gpt-3.5-turbo"
+  );
+  const [maxTokensStored, setMaxTokens, removeMaxTokens] = useLocalStorage(
+    "max-tokens",
+    "256"
+  );
+  const [temperatureStored, setTemperature, removeTemperature] =
+    useLocalStorage("temperature", "0.7");
+  const [topPStored, setTopP] = useLocalStorage("top-p", "1");
+
+  // Local state for handling changes
+  const [api, setApiLocal] = useState(apiStored);
+  const [apiKey, setApiKeyLocal] = useState(apiKeyStored);
+  const [model, setModelLocal] = useState(modelStored);
+  const [maxTokens, setMaxTokensLocal] = useState(maxTokensStored);
+  const [temperature, setTemperatureLocal] = useState(temperatureStored);
+  const [topP, setTopPLocal] = useState(topPStored);
+
+  function saveChanges() {
+    setApi(api);
+    setApiKey(apiKey);
+    setModel(model);
+    setMaxTokens(maxTokens);
+    setTemperature(temperature);
+    setTopP(topP);
+  }
+
   return (
     <div className="flex flex-row-reverse">
       {/* Sidebar */}
@@ -29,16 +69,12 @@ export default function RightSidebar() {
 
           {/* Select */}
           <div className="px-2 py-4 text-slate-800 dark:text-slate-200">
-            <label htmlFor="select-api" className="px-2 text-sm font-medium">
-              API
-            </label>
-            <select
-              name="select-api"
-              id="select-api"
-              className="mt-2 w-full cursor-pointer rounded-lg border-r-4 border-transparent bg-slate-200 py-3 pl-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 dark:bg-slate-800"
-            >
-              <option value="">OpenAI</option>
-            </select>
+            <InputSelect
+              label="API"
+              value={api}
+              options={["OpenAI"]}
+              onChange={(e) => setApiLocal(e.target.value)}
+            />
           </div>
 
           {/* More Settings */}
@@ -47,75 +83,43 @@ export default function RightSidebar() {
               Advanced
             </p>
 
-            <label
-              htmlFor="api-key"
-              className="mb-2 mt-4 block px-2 text-sm font-medium"
-            >
-              API Key
-            </label>
-            <input
-              type="password"
-              id="api-key"
-              className="block w-full rounded-lg bg-slate-200 p-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-600 dark:bg-slate-800 dark:placeholder-slate-400 dark:focus:ring-blue-600"
-              placeholder="sk-******"
+            <InputKey
+              label="API key"
+              value={apiKey}
+              onChange={(e) => setApiKeyLocal(e.target.value)}
+            />
+            <InputSelect
+              label="Model"
+              value={model}
+              options={["gpt-3.5-turbo", "gpt-4", "gpt-4-32k"]}
+              onChange={(e) => setModelLocal(e.target.value)}
+            />
+            <InputNum
+              label="Max tokens"
+              value={maxTokens}
+              min="0"
+              max="2048"
+              step="128"
+              onChange={(e) => setMaxTokensLocal(e.target.value)}
+            />
+            <InputNum
+              label="Temperature"
+              value={temperature}
+              min="0"
+              max="2"
+              step="0.1"
+              onChange={(e) => setTemperatureLocal(e.target.value)}
+            />
+            <InputNum
+              label="Top P"
+              value={topP}
+              min="0"
+              max="1"
+              step="0.1"
+              onChange={(e) => setTopPLocal(e.target.value)}
             />
 
-            <label
-              htmlFor="select-model"
-              className="mb-2 mt-4 block px-2 text-sm font-medium"
-            >
-              Model
-            </label>
-            <select
-              name="select-model"
-              id="select-model"
-              className="block w-full cursor-pointer rounded-lg border-r-4 border-transparent bg-slate-200 py-3 pl-1 text-xs focus:outline-none focus:ring-2 focus:ring-blue-600 dark:bg-slate-800 dark:placeholder-slate-400 dark:focus:ring-blue-600"
-            >
-              <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
-              <option value="gpt-4">gpt-4</option>
-              <option value="gpt-4-32k">gpt-4-32k</option>
-            </select>
-
-            <label
-              htmlFor="max-tokens"
-              className="mb-2 mt-4 block px-2 text-sm font-medium"
-            >
-              Max tokens
-            </label>
-            <input
-              type="number"
-              id="max-tokens"
-              className="block w-full rounded-lg bg-slate-200 p-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-600 dark:bg-slate-800 dark:placeholder-slate-400 dark:focus:ring-blue-600"
-              placeholder="2048"
-            />
-
-            <label
-              htmlFor="temperature"
-              className="mb-2 mt-4 block px-2 text-sm font-medium"
-            >
-              Temperature
-            </label>
-            <input
-              type="number"
-              id="temperature"
-              className="block w-full rounded-lg bg-slate-200 p-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-600 dark:bg-slate-800 dark:placeholder-slate-400 dark:focus:ring-blue-600"
-              placeholder="0.7"
-            />
-
-            <label
-              htmlFor="top-p"
-              className="mb-2 mt-4 block px-2 text-sm font-medium"
-            >
-              Top P
-            </label>
-            <input
-              type="number"
-              id="top-p"
-              className="block w-full rounded-lg bg-slate-200 p-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-600 dark:bg-slate-800 dark:placeholder-slate-400 dark:focus:ring-blue-600"
-              placeholder="1"
-            />
-            <br />
-            <Button label="Save changes" takeAction={undefined} />
+            <Button label="Save changes" takeAction={saveChanges} />
           </div>
         </div>
       </aside>

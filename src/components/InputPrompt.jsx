@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function PromptInput({ onNewPrompt }) {
+export default function InputPrompt({ onNewPrompt }) {
   const [prompt, setPrompt] = useState("");
 
   // Handle form submission
@@ -17,7 +17,7 @@ export default function PromptInput({ onNewPrompt }) {
       onSubmit={handleSubmit}
       className="flex w-full items-center border-t border-slate-300 bg-slate-200 p-2 dark:border-slate-700 dark:bg-slate-900"
     >
-      <label for="chat-input" className="sr-only">
+      <label htmlFor="chat-input" className="sr-only">
         Enter your prompt
       </label>
       <div>
@@ -30,11 +30,11 @@ export default function PromptInput({ onNewPrompt }) {
             className="h-6 w-6"
             aria-hidden="true"
             viewBox="0 0 24 24"
-            stroke-width="2"
+            strokeWidth="2"
             stroke="currentColor"
             fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           >
             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
             <path d="M12 5l0 14"></path>
@@ -61,11 +61,11 @@ export default function PromptInput({ onNewPrompt }) {
             className="h-6 w-6"
             aria-hidden="true"
             viewBox="0 0 24 24"
-            stroke-width="2"
+            strokeWidth="2"
             stroke="currentColor"
             fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           >
             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
             <path d="M10 14l11 -11"></path>

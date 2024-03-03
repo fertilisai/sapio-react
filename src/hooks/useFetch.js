@@ -1,7 +1,17 @@
 import useAsync from "./useAsync";
 
+// const DEFAULT_OPTIONS = {
+//   headers: { "Content-Type": "application/json" },
+// };
+
+let apiKeyStored = localStorage.getItem("api-key");
+
 const DEFAULT_OPTIONS = {
-  headers: { "Content-Type": "application/json" },
+  method: "POST",
+  headers: {
+    Authorization: "Bearer " + apiKeyStored, //,
+    "Content-Type": "application/json",
+  },
 };
 
 export default function useFetch(url, options = {}, dependencies = []) {
