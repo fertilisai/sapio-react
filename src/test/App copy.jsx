@@ -1,4 +1,6 @@
 import { useState } from "react";
+// import { useEffect } from "react";
+// import { useRef } from "react";
 
 import Menu from "./components/Menu.jsx";
 import LeftSidebar from "./components/LeftSidebar.jsx";
@@ -6,6 +8,7 @@ import RightSidebar from "./components/RightSidebar.jsx";
 import Chat from "./components/Chat.jsx";
 import { useLocalStorage } from "./hooks/useStorage.js";
 import { convoLists } from "./data/convoLists.js";
+// import useFetch from "./hooks/useFetch.js";
 import today from "./utils/utils.js";
 // import sendRequest from "./utils/api.js";
 
@@ -18,6 +21,11 @@ export default function App() {
   const [result, setResult] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
+
+  // useEffect(() => {
+  //   // This function will run whenever `convoList` changes.
+  //   // window.location.reload();
+  // }, [convoList]);
 
   function handleFetch() {
     setFetchCount((currentCount) => currentCount + 1);
@@ -42,6 +50,7 @@ export default function App() {
     }
     setConvoList(JSON.stringify(convo));
     setResult("");
+    // return console.log(convo);
   }
 
   function handleNewChat() {
@@ -55,20 +64,16 @@ export default function App() {
       ...convo,
     ];
     setConvoList(JSON.stringify(convo));
-  }
-
-  function saveConvo(result) {
-    const tab = selectedConvo;
-    let convo = JSON.parse(convoList);
-    let messages = convo[tab].messages;
-    messages = saveMsg(messages, "assistant", result);
-    convo[tab].messages = messages;
-    setConvoList(JSON.stringify(convo));
-    setResult("");
+    // return console.log(convo);
   }
 
   function saveMsg(messages, role, content) {
+    // let convo = JSON.parse(convoList);
+    // let messages = convo[tab].messages;
     messages = [...messages, { role: role, content: content }];
+    // convo[tab].messages = messages;
+    // setConvoList(JSON.stringify(convo));
+    // console.log(messages);
     return messages;
   }
 
@@ -82,23 +87,40 @@ export default function App() {
     messages = [...messages, { role: "user", content: prompt }];
     convo[tab].messages = messages;
     setConvoList(JSON.stringify(convo));
+    // saveMsg(convoList, tab, "user", prompt);
+    // console.log(messages);
     newAnswer(messages, tab);
+
+    // console.log(messages);
+    // return console.log(convo);
   }
 
-  // Function to handle new answers
-  function newAnswer(messages, tab) {
-    sendRequest(messages);
-    if (result !== "") {
-      messages = saveMsg(messages, "assistant", result);
-      let convo = JSON.parse(convoList);
-      convo[tab].messages = messages;
-      setConvoList(JSON.stringify(convo));
-    }
-  }
+  // const { loading, error, value } = useFetch(
+  //   `https://api.openai.com/v1/chat/completions`,
+  //   {
+  //     body: JSON.stringify({
+  //       model: "gpt-3.5-turbo",
+  //       messages: JSON.parse(convoList)[selectedConvo].messages,
+  //       max_tokens: Number(localStorage.getItem("max-tokens")),
+  //       temperature: Number(localStorage.getItem("temperature")),
+  //       top_p: Number(localStorage.getItem("top-p")),
+  //       // frequency_penalty: frequence,
+  //       // presence_penalty: presence,
+  //     }),
+  //   },
+  //   [FetchCount]
+  // );
 
+  // console.log("FetchCount:" + FetchCount);
+  // console.log("Loading:" + loading);
+  // console.log("Error:" + error);
+  // console.log(value.choices[0].message.content);
+  // console.log(JSON.parse(localStorage.getItem("model")));
   const apiKeyStored = JSON.parse(localStorage.getItem("api-key"));
 
   const sendRequest = async (messages) => {
+    // let messages = JSON.parse(convoList)[tab].messages;
+    // console.log(messages);
     setLoading(true);
     const res = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -128,6 +150,58 @@ export default function App() {
     // return res;
   };
 
+  // const waitForResult = async (result) => {
+  //   if (result !== "") {
+  //     return result;
+  //   } else {
+  //     return await waitForResult(result);
+  //   }
+  // };
+
+  // Function to handle new answers
+  function newAnswer(messages, tab) {
+    // console.log(messages);
+
+    // let messages = convo[tab].messages;
+    // let messages = JSON.parse(convoList)[selectedConvo].messages
+
+    sendRequest(messages);
+    if (result !== "") {
+      messages = saveMsg(messages, "assistant", result);
+      let convo = JSON.parse(convoList);
+      convo[tab].messages = messages;
+      setConvoList(JSON.stringify(convo));
+    }
+    // setResult(waitForResult(result));
+    // console.log(result);
+    // console.log(messages);
+    // setTimeout(() => {}, 1000);
+
+    // if (!loading && result !== "") {
+    //   messages = [
+    //     ...messages,
+    //     { role: "assistant", content: result },
+    //     // { role: "assistant", content: value.choices[0].message.content },
+    //   ];
+    //   convo[tab].messages = messages;
+    //   setConvoList(JSON.stringify(convo));
+    // }
+
+    // console.log(value.choices[0].message.content);
+
+    // setConvoList(
+    //   JSON.stringify(
+    //     (convo[tab].messages = [
+    //       ...messages,
+    //       { role: "assistant", content: loading ? result : "..." },
+    //     ])
+    //   )
+    // );
+
+    // console.log(convo);
+    //  return console.log(convo);
+  }
+
   return (
     <>
       <div className="container-fluid">
@@ -146,11 +220,13 @@ export default function App() {
         <div className="main">
           <Chat
             convo={JSON.parse(convoList)[selectedConvo].messages}
+            // convoList={convoList}
+            // setConvoList={setConvoList}
+            // tab={selectedConvo}
             newPrompt={newPrompt}
             handleFetch={handleFetch}
             loading={loading}
             result={result}
-            saveConvo={saveConvo}
           />
         </div>
         <div className="right">

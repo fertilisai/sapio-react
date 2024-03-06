@@ -1,6 +1,6 @@
 export default function ConvoList(props) {
   return (
-    <button className={props.className} onClick={props.onClick}>
+    <a href="#" className={props.className} onClick={props.onClick}>
       <h1 className="text-sm font-medium capitalize text-slate-700 dark:text-slate-200">
         {props.title}
       </h1>
@@ -32,6 +32,6 @@ export default function ConvoList(props) {
           </button>
         </div>
       </div>
-    </button>
+    </a>
   );
 }

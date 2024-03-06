@@ -1,4 +1,12 @@
 export default function MsgAssistant(props) {
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(props.content);
+    } catch (err) {
+      console.error("Failed to copy content to clipboard", err);
+    }
+  };
+
   return (
     <div className="flex bg-slate-100 px-4 py-8 dark:bg-slate-900 sm:px-6">
       <img
@@ -9,16 +17,20 @@ export default function MsgAssistant(props) {
       <div className="flex w-full flex-col items-start lg:flex-row lg:justify-between">
         <p className="max-w-3xl">{props.content}</p>
         <div className="mt-4 flex flex-row justify-start gap-x-2 text-slate-500 lg:mt-0">
-          <button className="hover:text-blue-600" type="button">
+          <button
+            className="hover:text-blue-600"
+            type="button"
+            onClick={copyToClipboard}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
               viewBox="0 0 24 24"
-              stroke-width="2"
+              strokeWidth="2"
               stroke="currentColor"
               fill="none"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             >
               <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
               <path d="M8 8m0 2a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2z"></path>

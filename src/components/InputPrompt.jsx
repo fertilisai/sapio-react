@@ -1,12 +1,13 @@
 import { useState } from "react";
 
-export default function InputPrompt({ onNewPrompt }) {
+export default function InputPrompt({ onNewPrompt, handleFetch }) {
   const [prompt, setPrompt] = useState("");
 
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
     if (prompt) {
+      handleFetch();
       onNewPrompt(prompt);
       setPrompt("");
     }
@@ -43,14 +44,15 @@ export default function InputPrompt({ onNewPrompt }) {
           <span className="sr-only">Add</span>
         </button>
       </div>
-      <textarea
+      <input
+        type="text"
         id="chat-input"
         rows="1"
         className="mx-2 flex min-h-full w-full rounded-md border border-slate-300 bg-slate-50 p-2 text-base text-slate-900 placeholder-slate-400 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-50 dark:placeholder-slate-400 dark:focus:border-blue-600 dark:focus:ring-blue-600"
         placeholder="Enter your prompt"
         value={prompt}
         onChange={(e) => setPrompt(e.target.value)}
-      ></textarea>
+      ></input>
       <div>
         <button
           className="inline-flex hover:text-blue-600 dark:text-slate-200 dark:hover:text-blue-600 sm:p-2"

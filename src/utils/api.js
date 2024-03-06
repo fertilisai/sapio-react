@@ -1,11 +1,13 @@
 // API resquest to openai
 export default async function sendRequest(messages) {
-  console.log(messages);
+  // console.log(messages);
+  // setLoading(true);
+  const apiKeyStored = JSON.parse(localStorage.getItem("api-key"));
 
   let response = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: {
-      Authorization: "Bearer " + OPENAI_API_KEY,
+      Authorization: "Bearer " + apiKeyStored,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
@@ -24,13 +26,14 @@ export default async function sendRequest(messages) {
   // console.log(response.choices[0].message.content);
   //console.log(response);
 
-  // const r = await handleResponse(response);
-  const r = await response.choices[0].message.content;
+  const r = await handleResponse(response);
+  // const r = await response.choices[0].message.content;
+  // console.log(r);
   return r;
 }
 
-// export function handleResponse(response) {
-//   // console.log(response);
-//   let answer = response.choices[0].message.content;
-//   return answer;
-// }
+export function handleResponse(response) {
+  // console.log(response);
+  let answer = response.choices[0].message.content;
+  return answer;
+}

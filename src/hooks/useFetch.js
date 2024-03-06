@@ -4,12 +4,12 @@ import useAsync from "./useAsync";
 //   headers: { "Content-Type": "application/json" },
 // };
 
-let apiKeyStored = localStorage.getItem("api-key");
+const apiKeyStored = JSON.parse(localStorage.getItem("api-key"));
 
 const DEFAULT_OPTIONS = {
   method: "POST",
   headers: {
-    Authorization: "Bearer " + apiKeyStored, //,
+    Authorization: "Bearer " + apiKeyStored,
     "Content-Type": "application/json",
   },
 };
