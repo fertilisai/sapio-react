@@ -7,21 +7,15 @@ import Chat from "./components/Chat.jsx";
 import { useLocalStorage } from "./hooks/useStorage.js";
 import { convoLists } from "./data/convoLists.js";
 import today from "./utils/utils.js";
-// import sendRequest from "./utils/api.js";
 
 export default function App() {
   const [convoList, setConvoList, removeConvoList] = useLocalStorage(
     JSON.stringify(convoLists)
   );
   const [selectedConvo, setSelectedConvo] = useState(0);
-  const [FetchCount, setFetchCount] = useState(0);
   const [result, setResult] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
-
-  function handleFetch() {
-    setFetchCount((currentCount) => currentCount + 1);
-  }
 
   // Function to handle conversation selection
   function handleSelect(selectedList) {
@@ -74,11 +68,13 @@ export default function App() {
 
   // Function to handle new prompts
   function newPrompt(prompt) {
-    // prevent printing to other convo
     const tab = selectedConvo;
     let convo = JSON.parse(convoList);
     let messages = convo[tab].messages;
-    // // TODO: new title
+    // Use first prompt as conversation title
+    if (messages.length == 1) {
+      convo[tab].title = prompt.slice(0, 56);
+    }
     messages = [...messages, { role: "user", content: prompt }];
     convo[tab].messages = messages;
     setConvoList(JSON.stringify(convo));
@@ -109,23 +105,20 @@ export default function App() {
       body: JSON.stringify({
         model: "gpt-3.5-turbo",
         messages: messages,
-        max_tokens: 256,
-        temperature: 0.7,
-        top_p: 1,
-        // frequency_penalty: frequence,
-        // presence_penalty: presence,
+        max_tokens: Number(localStorage.getItem("max-tokens")),
+        temperature: Number(localStorage.getItem("temperature")),
+        top_p: Number(localStorage.getItem("top-p")),
+        // frequency_penalty: Number(localStorage.getItem("frequency_penalty")),
+        // presence_penalty: Number(localStorage.getItem("presence_penalty")),
       }),
     })
       .then((res) => res.json())
       .then((res) => res.choices[0].message.content)
-      // .then((msg) => saveMsg(messages, "assistant", msg))
-      // .then((log) => console.log(log))
       .catch((error) => console.log(error));
 
     setResult(res);
     setLoading(false);
     setError(error);
-    // return res;
   };
 
   return (
@@ -136,7 +129,6 @@ export default function App() {
             <Menu />
             <LeftSidebar
               convoList={JSON.parse(convoList)}
-              selectedConvo={selectedConvo}
               handleSelect={handleSelect}
               handleDelete={handleDelete}
               handleNewChat={handleNewChat}
@@ -147,7 +139,6 @@ export default function App() {
           <Chat
             convo={JSON.parse(convoList)[selectedConvo].messages}
             newPrompt={newPrompt}
-            handleFetch={handleFetch}
             loading={loading}
             result={result}
             saveConvo={saveConvo}

@@ -3,15 +3,6 @@ import MsgAssistant from "./MsgAssistant.jsx";
 import InputPrompt from "./InputPrompt.jsx";
 
 export default function Chat(props) {
-  // function saveMsg(convoList, tab, role, content) {
-  //   let convo = JSON.parse(convoList);
-  //   let messages = convo[tab].messages;
-  //   messages = [...messages, { role: role, content: content }];
-  //   convo[tab].messages = messages;
-  //   props.setConvoList(JSON.stringify(convo));
-  //   return messages;
-  // }
-
   return (
     <>
       <div className="flex h-[100vh] flex-col">
@@ -29,21 +20,18 @@ export default function Chat(props) {
               );
             }
           })}
-          {
-            props.loading ? (
-              <MsgAssistant content="..." />
-            ) : (
-              props.result !== "" && <MsgAssistant content={props.result} /> &&
-              props.saveConvo(props.result)
-            )
-            // saveMsg(props.convoList, props.tab, "assistant", props.result)
-          }
+          {props.loading ? (
+            <MsgAssistant content="..." />
+          ) : (
+            props.result !== "" && <MsgAssistant content={props.result} /> &&
+            props.saveConvo(props.result)
+          )}
         </div>
         {/* {window.scrollTo(0, document.body.scrollHeight)} */}
         <InputPrompt
           context="chat"
           onNewPrompt={props.newPrompt}
-          handleFetch={props.handleFetch}
+          // handleFetch={props.handleFetch}
         />
       </div>
     </>

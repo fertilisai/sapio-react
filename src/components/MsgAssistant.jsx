@@ -15,7 +15,9 @@ export default function MsgAssistant(props) {
       />
 
       <div className="flex w-full flex-col items-start lg:flex-row lg:justify-between">
-        <p className="max-w-3xl">{props.content}</p>
+        <p className="max-w-3xl">
+          <div style={{ whiteSpace: "pre-wrap" }}>{props.content}</div>
+        </p>
         <div className="mt-4 flex flex-row justify-start gap-x-2 text-slate-500 lg:mt-0">
           <button
             className="hover:text-blue-600"

@@ -1,13 +1,12 @@
 import { useState } from "react";
 
-export default function InputPrompt({ onNewPrompt, handleFetch }) {
+export default function InputPrompt({ onNewPrompt }) {
   const [prompt, setPrompt] = useState("");
 
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
     if (prompt) {
-      handleFetch();
       onNewPrompt(prompt);
       setPrompt("");
     }
