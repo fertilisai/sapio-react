@@ -2,7 +2,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/fertilisai/sapio-react">
-    <img src="scr/assets/favicon-128x128.png" alt="Logo" width="128" height="128">
+    <img src="src/assets/favicon-128x128.png" alt="Logo" width="128" height="128">
   </a>
 
   <h2 align="center">Sapio</h2>
