@@ -129,6 +129,7 @@ export default function App() {
             <Menu />
             <LeftSidebar
               convoList={JSON.parse(convoList)}
+              selectedConvo={selectedConvo}
               handleSelect={handleSelect}
               handleDelete={handleDelete}
               handleNewChat={handleNewChat}
