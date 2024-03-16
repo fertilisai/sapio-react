@@ -30,12 +30,11 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
 
-  // useEffect(() => {
-  //   // Assuming you have a dependency that triggers saveConvo
-  //   if (result) {
-  //     saveConvo(result);
-  //   }
-  // }, [convoList, saveConvo]);
+  useEffect(() => {
+    if (result) {
+      saveConvo(result);
+    }
+  }, [result]);
 
   // Function to handle conversation selection
   function handleSelect(selectedList) {
