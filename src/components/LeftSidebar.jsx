@@ -11,7 +11,7 @@ export default function LeftSidebar(props) {
     <div className="h-screen w-52 overflow-y-auto bg-slate-50 py-8 dark:bg-slate-900 sm:w-60">
       <div className="flex items-start">
         <h2 className="inline px-5 text-lg font-medium text-slate-800 dark:text-slate-200">
-          Chats
+          Chats {/*  {props.icon.toUpperCase()}  */}
         </h2>
       </div>
 

@@ -1,19 +1,10 @@
 import { useState } from "react";
 
-export default function Menu() {
+export default function Menu(props) {
   const unselected =
     "rounded-lg p-1.5 text-slate-500 transition-colors duration-200 hover:bg-slate-200 focus:outline-none dark:text-slate-400 dark:hover:bg-slate-800";
   const selected =
     "rounded-lg bg-blue-100 p-1.5 text-blue-600 transition-colors duration-200 dark:bg-slate-800 dark:text-blue-600";
-
-  const icon = ["chat", "image", "audio", "video", "doc", "user", "settings"];
-
-  const [selectedIcon, setSelectedIcon] = useState(icon[0]);
-
-  // Function to handle click
-  function handleSelect(selectedButton) {
-    setSelectedIcon(selectedButton);
-  }
 
   return (
     <div className="flex h-screen w-12 flex-col items-center space-y-8 border-r border-slate-300 bg-slate-50 py-8 dark:border-slate-700 dark:bg-slate-900 sm:w-16">
@@ -39,8 +30,8 @@ export default function Menu() {
       {/* Chat */}
       <a
         href="#"
-        className={selectedIcon === "chat" ? selected : unselected}
-        onClick={() => handleSelect("chat")}
+        className={props.selectedIcon === "chat" ? selected : unselected}
+        onClick={() => props.handleSelectIcon("chat")}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -60,8 +51,8 @@ export default function Menu() {
       {/* Image */}
       <a
         href="#"
-        className={selectedIcon === "image" ? selected : unselected}
-        onClick={() => handleSelect("image")}
+        className={props.selectedIcon === "image" ? selected : unselected}
+        onClick={() => props.handleSelectIcon("image")}
       >
         <svg
           className="w-6 h-6"
@@ -87,8 +78,8 @@ export default function Menu() {
       {/* Audio */}
       <a
         href="#"
-        className={selectedIcon === "audio" ? selected : unselected}
-        onClick={() => handleSelect("audio")}
+        className={props.selectedIcon === "audio" ? selected : unselected}
+        onClick={() => props.handleSelectIcon("audio")}
       >
         <svg
           className="w-6 h-6"
@@ -108,8 +99,8 @@ export default function Menu() {
       {/* Video */}
       <a
         href="#"
-        className={selectedIcon === "video" ? selected : unselected}
-        onClick={() => handleSelect("video")}
+        className={props.selectedIcon === "video" ? selected : unselected}
+        onClick={() => props.handleSelectIcon("video")}
       >
         <svg
           className="w-6 h-6"
@@ -130,8 +121,8 @@ export default function Menu() {
       {/* Doc*/}
       <a
         href="#"
-        className={selectedIcon === "doc" ? selected : unselected}
-        onClick={() => handleSelect("doc")}
+        className={props.selectedIcon === "doc" ? selected : unselected}
+        onClick={() => props.handleSelectIcon("doc")}
       >
         <svg
           className="w-6 h-6"
@@ -152,8 +143,8 @@ export default function Menu() {
       {/* User */}
       <a
         href="#"
-        className={selectedIcon === "user" ? selected : unselected}
-        onClick={() => handleSelect("user")}
+        className={props.selectedIcon === "user" ? selected : unselected}
+        onClick={() => props.handleSelectIcon("user")}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -174,8 +165,8 @@ export default function Menu() {
       {/* Settings */}
       <a
         href="#"
-        className={selectedIcon === "settings" ? selected : unselected}
-        onClick={() => handleSelect("settings")}
+        className={props.selectedIcon === "settings" ? selected : unselected}
+        onClick={() => props.handleSelectIcon("settings")}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

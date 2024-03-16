@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useEffect } from "react";
 
 import Menu from "./components/Menu.jsx";
 import LeftSidebar from "./components/LeftSidebar.jsx";
@@ -9,13 +10,32 @@ import { convoLists } from "./data/convoLists.js";
 import today from "./utils/utils.js";
 
 export default function App() {
+  const icon = ["chat", "image", "audio", "video", "doc", "user", "settings"];
+
+  const [selectedIcon, setSelectedIcon] = useState(icon[0]);
+  // const [history, setHistory] = useSate(convoList);
+
+  // Function to handle icon selection
+  function handleSelectIcon(selectedButton) {
+    setSelectedIcon(selectedButton);
+  }
+
   const [convoList, setConvoList, removeConvoList] = useLocalStorage(
+    "convo",
     JSON.stringify(convoLists)
   );
+
   const [selectedConvo, setSelectedConvo] = useState(0);
   const [result, setResult] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
+
+  // useEffect(() => {
+  //   // Assuming you have a dependency that triggers saveConvo
+  //   if (result) {
+  //     saveConvo(result);
+  //   }
+  // }, [convoList, saveConvo]);
 
   // Function to handle conversation selection
   function handleSelect(selectedList) {
@@ -120,13 +140,17 @@ export default function App() {
     setLoading(false);
     setError(error);
   };
+  // console.log(convoList);
 
   return (
     <>
       <div className="container-fluid">
         <div className="left">
           <aside className="flex">
-            <Menu />
+            <Menu
+              handleSelectIcon={handleSelectIcon}
+              selectedIcon={selectedIcon}
+            />
             <LeftSidebar
               convoList={JSON.parse(convoList)}
               selectedConvo={selectedConvo}

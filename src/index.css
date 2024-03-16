@@ -19,6 +19,6 @@
   flex-shrink: 0;
 }
 .main {
-  flex-grow: 4;
+  flex-grow: 5;
   min-width: 650px;
 }

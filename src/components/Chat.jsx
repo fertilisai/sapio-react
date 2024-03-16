@@ -20,12 +20,7 @@ export default function Chat(props) {
               );
             }
           })}
-          {props.loading ? (
-            <MsgAssistant content="..." />
-          ) : (
-            props.result !== "" && <MsgAssistant content={props.result} /> &&
-            props.saveConvo(props.result)
-          )}
+          {props.loading ? <MsgAssistant content="..." /> : undefined}
         </div>
         {/* {window.scrollTo(0, document.body.scrollHeight)} */}
         <InputPrompt

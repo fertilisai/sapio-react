@@ -72,8 +72,13 @@ export default function RightSidebar() {
             <InputSelect
               label="API"
               value={api}
-              options={["OpenAI"]}
+              options={["OpenAI", "Anthropic"]}
               onChange={(e) => setApiLocal(e.target.value)}
+            />
+            <InputKey
+              label="API key"
+              value={apiKey}
+              onChange={(e) => setApiKeyLocal(e.target.value)}
             />
           </div>
 
@@ -83,11 +88,6 @@ export default function RightSidebar() {
               Advanced
             </p>
 
-            <InputKey
-              label="API key"
-              value={apiKey}
-              onChange={(e) => setApiKeyLocal(e.target.value)}
-            />
             <InputSelect
               label="Model"
               value={model}
