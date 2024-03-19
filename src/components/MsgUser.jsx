@@ -6,7 +6,8 @@ export default function MsgUser(props) {
         src="https://dummyimage.com/256x256/363536/ffffff&text=U"
       />
       <div className="flex max-w-3xl items-center">
-        <p>{props.content}</p>
+        {props.content}
+        {/* <p>{props.content}</p> */}
       </div>
     </div>
   );

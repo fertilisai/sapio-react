@@ -8,6 +8,7 @@ import Chat from "./components/Chat.jsx";
 import { useLocalStorage } from "./hooks/useStorage.js";
 import { convoLists } from "./data/convoLists.js";
 import today from "./utils/utils.js";
+// import sendRequest from "./utils/api.js";
 
 export default function App() {
   const icon = ["chat", "image", "audio", "video", "doc", "user", "settings"];

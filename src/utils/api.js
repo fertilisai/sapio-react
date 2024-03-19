@@ -1,10 +1,8 @@
 // API resquest to openai
+const apiKeyStored = JSON.parse(localStorage.getItem("api-key"));
 export default async function sendRequest(messages) {
-  // console.log(messages);
-  // setLoading(true);
-  const apiKeyStored = JSON.parse(localStorage.getItem("api-key"));
-
-  let response = await fetch("https://api.openai.com/v1/chat/completions", {
+  setLoading(true);
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: {
       Authorization: "Bearer " + apiKeyStored,
@@ -13,27 +11,18 @@ export default async function sendRequest(messages) {
     body: JSON.stringify({
       model: "gpt-3.5-turbo",
       messages: messages,
-      max_tokens: 256,
-      temperature: 0.7,
-      top_p: 1,
-      // frequency_penalty: frequence,
-      // presence_penalty: presence,
+      max_tokens: Number(localStorage.getItem("max-tokens")),
+      temperature: Number(localStorage.getItem("temperature")),
+      top_p: Number(localStorage.getItem("top-p")),
+      // frequency_penalty: Number(localStorage.getItem("frequency_penalty")),
+      // presence_penalty: Number(localStorage.getItem("presence_penalty")),
     }),
   })
-    .then((response) => response.json())
+    .then((res) => res.json())
+    .then((res) => res.choices[0].message.content)
     .catch((error) => console.log(error));
 
-  // console.log(response.choices[0].message.content);
-  //console.log(response);
-
-  const r = await handleResponse(response);
-  // const r = await response.choices[0].message.content;
-  // console.log(r);
-  return r;
-}
-
-export function handleResponse(response) {
-  // console.log(response);
-  let answer = response.choices[0].message.content;
-  return answer;
+  setResult(res);
+  setLoading(false);
+  setError(error);
 }

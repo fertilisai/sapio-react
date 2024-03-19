@@ -1,3 +1,7 @@
+// import DOMPurify from "dompurify";
+// import { marked } from "marked";
+// import highlight from "../assets/harmonic16-dark.min.css";
+// import highlight from "../assets/harmonic16-light.min.css";
 export default function MsgAssistant(props) {
   const copyToClipboard = async () => {
     try {
@@ -17,6 +21,12 @@ export default function MsgAssistant(props) {
       <div className="flex w-full flex-col items-start lg:flex-row lg:justify-between">
         <div style={{ whiteSpace: "pre-wrap" }}>
           <p className="max-w-3xl">{props.content}</p>
+          {/* <div
+            className="content"
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(marked.parse(props.content)),
+            }}
+          ></div> */}
         </div>
         <div className="mt-4 flex flex-row justify-start gap-x-2 text-slate-500 lg:mt-0">
           <button

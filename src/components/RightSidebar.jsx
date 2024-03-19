@@ -72,7 +72,7 @@ export default function RightSidebar() {
             <InputSelect
               label="API"
               value={api}
-              options={["OpenAI", "Anthropic"]}
+              options={["OpenAI"]}
               onChange={(e) => setApiLocal(e.target.value)}
             />
             <InputKey
