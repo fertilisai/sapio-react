@@ -18,14 +18,15 @@
 
 ![Sapio-screenshot](src/assets/Screenshot.png)
 
-Sapio is a React App that allows you to chat with OpenAI's API. The goal is to continue adding features frequently and make the LLMs capabilities event more powerful.
+Sapio is a Generative AI Studio that allows you to use LLMs with privacy in mind. The goal is to continue adding features frequently and make the LLMs capabilities event more powerful.
 
 Why not just using ChatGPT instead?
 
+- Privacy first (no logs, chats not used by OpenAI for training)
+- Conversations are stored locally in the browser
 - Always available (no busy servers)
 - No login and connection timeout
 - More parameters to play with
-- Variables and conversation are stored locally in the browser
 - A fraction of the cost of ChatGPT Pro
 
 <!-- INSTALLATION -->

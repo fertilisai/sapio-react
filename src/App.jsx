@@ -4,17 +4,15 @@ import { useEffect } from "react";
 import Menu from "./components/Menu.jsx";
 import LeftSidebar from "./components/LeftSidebar.jsx";
 import RightSidebar from "./components/RightSidebar.jsx";
-import Chat from "./components/Chat.jsx";
+import Convo from "./components/Convo.jsx";
 import { useLocalStorage } from "./hooks/useStorage.js";
 import { convoLists } from "./data/convoLists.js";
 import today from "./utils/utils.js";
 // import sendRequest from "./utils/api.js";
 
 export default function App() {
-  const icon = ["chat", "image", "audio", "video", "doc", "user", "settings"];
-
+  const icon = ["chat", "image", "audio", "video", "doc", "agent", "settings"];
   const [selectedIcon, setSelectedIcon] = useState(icon[0]);
-  // const [history, setHistory] = useSate(convoList);
 
   // Function to handle icon selection
   function handleSelectIcon(selectedButton) {
@@ -45,28 +43,31 @@ export default function App() {
   function handleDelete(selectedList) {
     let convo = JSON.parse(convoList);
 
-    if (convo.length - 1 == selectedList) {
-      convo.splice(selectedList, 1, {
+    if (convo[selectedIcon].length - 1 == selectedList) {
+      convo[selectedIcon].splice(selectedList, 1, {
         title: "New conversation",
         date: today(),
         messages: [{ role: "system", content: "You are a helpful assistant." }],
       });
+      // } else if (convo.length - 1 == selectedList) {
+      //   convo.splice(-1);
     } else {
-      convo.splice(selectedList, 1);
+      convo[selectedIcon].splice(selectedList, 1);
     }
+
     setConvoList(JSON.stringify(convo));
     setResult("");
   }
 
-  function handleNewChat() {
+  function handleNew() {
     let convo = JSON.parse(convoList);
-    convo = [
+    convo[selectedIcon] = [
       {
         title: "New conversation",
         date: today(),
         messages: [{ role: "system", content: "You are a helpful assistant." }],
       },
-      ...convo,
+      ...convo[selectedIcon],
     ];
     setConvoList(JSON.stringify(convo));
   }
@@ -74,9 +75,9 @@ export default function App() {
   function saveConvo(result) {
     const tab = selectedConvo;
     let convo = JSON.parse(convoList);
-    let messages = convo[tab].messages;
+    let messages = convo[selectedIcon][tab].messages;
     messages = saveMsg(messages, "assistant", result);
-    convo[tab].messages = messages;
+    convo[selectedIcon][tab].messages = messages;
     setConvoList(JSON.stringify(convo));
     setResult("");
   }
@@ -90,13 +91,13 @@ export default function App() {
   function newPrompt(prompt) {
     const tab = selectedConvo;
     let convo = JSON.parse(convoList);
-    let messages = convo[tab].messages;
+    let messages = convo[selectedIcon][tab].messages;
     // Use first prompt as conversation title
     if (messages.length == 1) {
-      convo[tab].title = prompt.slice(0, 56);
+      convo[selectedIcon][tab].title = prompt.slice(0, 56);
     }
     messages = [...messages, { role: "user", content: prompt }];
-    convo[tab].messages = messages;
+    convo[selectedIcon][tab].messages = messages;
     setConvoList(JSON.stringify(convo));
     newAnswer(messages, tab);
   }
@@ -107,7 +108,7 @@ export default function App() {
     if (result !== "") {
       messages = saveMsg(messages, "assistant", result);
       let convo = JSON.parse(convoList);
-      convo[tab].messages = messages;
+      convo[selectedIcon][tab].messages = messages;
       setConvoList(JSON.stringify(convo));
     }
   }
@@ -140,7 +141,6 @@ export default function App() {
     setLoading(false);
     setError(error);
   };
-  // console.log(convoList);
 
   return (
     <>
@@ -152,17 +152,19 @@ export default function App() {
               selectedIcon={selectedIcon}
             />
             <LeftSidebar
-              convoList={JSON.parse(convoList)}
+              convoList={JSON.parse(convoList)[selectedIcon]}
               selectedConvo={selectedConvo}
               handleSelect={handleSelect}
               handleDelete={handleDelete}
-              handleNewChat={handleNewChat}
+              handleNewChat={handleNew}
             />
           </aside>
         </div>
+
+        {/* {console.log(JSON.parse(convoList))} */}
         <div className="main">
-          <Chat
-            convo={JSON.parse(convoList)[selectedConvo].messages}
+          <Convo
+            convo={JSON.parse(convoList)[selectedIcon][selectedConvo].messages}
             newPrompt={newPrompt}
             loading={loading}
             result={result}

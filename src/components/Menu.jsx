@@ -26,7 +26,6 @@ export default function Menu(props) {
           />
         </svg>
       </a>
-
       {/* Chat */}
       <a
         href="#"
@@ -118,8 +117,8 @@ export default function Menu(props) {
           />
         </svg>
       </a>
-      {/* Doc*/}
-      <a
+      {/* Doc */}
+      {/* <a
         href="#"
         className={props.selectedIcon === "doc" ? selected : unselected}
         onClick={() => props.handleSelectIcon("doc")}
@@ -139,12 +138,12 @@ export default function Menu(props) {
             d="M10 3v4c0 .6-.4 1-1 1H5m4 8h6m-6-4h6m4-8v16c0 .6-.4 1-1 1H6a1 1 0 0 1-1-1V8c0-.4.1-.6.3-.8l4-4 .6-.2H18c.6 0 1 .4 1 1Z"
           />
         </svg>
-      </a>
-      {/* User */}
-      <a
+      </a> */}
+      {/* Agent*/}
+      {/* <a
         href="#"
-        className={props.selectedIcon === "user" ? selected : unselected}
-        onClick={() => props.handleSelectIcon("user")}
+        className={props.selectedIcon === "agent" ? selected : unselected}
+        onClick={() => props.handleSelectIcon("agent")}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -161,9 +160,9 @@ export default function Menu(props) {
           <path d="M12 10m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"></path>
           <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855"></path>
         </svg>
-      </a>
+      </a> */}
       {/* Settings */}
-      <a
+      {/* <a
         href="#"
         className={props.selectedIcon === "settings" ? selected : unselected}
         onClick={() => props.handleSelectIcon("settings")}
@@ -182,7 +181,7 @@ export default function Menu(props) {
           <path d="M19.875 6.27a2.225 2.225 0 0 1 1.125 1.948v7.284c0 .809 -.443 1.555 -1.158 1.948l-6.75 4.27a2.269 2.269 0 0 1 -2.184 0l-6.75 -4.27a2.225 2.225 0 0 1 -1.158 -1.948v-7.285c0 -.809 .443 -1.554 1.158 -1.947l6.75 -3.98a2.33 2.33 0 0 1 2.25 0l6.75 3.98h-.033z"></path>
           <path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"></path>
         </svg>
-      </a>
+      </a> */}
     </div>
   );
 }

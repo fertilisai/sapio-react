@@ -3,7 +3,7 @@ import MsgUser from "./MsgUser.jsx";
 import MsgAssistant from "./MsgAssistant.jsx";
 import InputPrompt from "./InputPrompt.jsx";
 
-export default function Chat(props) {
+export default function Convo(props) {
   return (
     <>
       <div className="flex h-[100vh] flex-col">
@@ -12,7 +12,7 @@ export default function Chat(props) {
         ) : undefined} */}
         {/* <!-- Messages --> */}
         <div className="flex-1 overflow-y-auto no-scrollbar bg-slate-300 text-sm leading-6 text-slate-900 shadow-md dark:bg-slate-800 dark:text-slate-300 sm:text-base sm:leading-7">
-          {props.convo.map((el, key) => {
+          {props.convo?.map((el, key) => {
             // console.log(el);
             if (el.role === "user") {
               // console.log(props.convo);
