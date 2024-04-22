@@ -125,6 +125,7 @@ export default function App() {
       },
       body: JSON.stringify({
         model: "gpt-3.5-turbo",
+        // model: localStorage.getItem("model"),
         messages: messages,
         max_tokens: Number(localStorage.getItem("max-tokens")),
         temperature: Number(localStorage.getItem("temperature")),
@@ -157,6 +158,7 @@ export default function App() {
               handleSelect={handleSelect}
               handleDelete={handleDelete}
               handleNewChat={handleNew}
+              icon={selectedIcon}
             />
           </aside>
         </div>

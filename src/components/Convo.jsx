@@ -1,4 +1,5 @@
 // import Alert from "./Alert.jsx";
+
 import MsgUser from "./MsgUser.jsx";
 import MsgAssistant from "./MsgAssistant.jsx";
 import InputPrompt from "./InputPrompt.jsx";
@@ -25,11 +26,8 @@ export default function Convo(props) {
           {props.loading ? <MsgAssistant content="..." /> : undefined}
         </div>
         {/* {window.scrollTo(0, document.body.scrollHeight)} */}
-        <InputPrompt
-          context="chat"
-          onNewPrompt={props.newPrompt}
-          // handleFetch={props.handleFetch}
-        />
+
+        <InputPrompt context="chat" onNewPrompt={props.newPrompt} />
       </div>
     </>
   );
