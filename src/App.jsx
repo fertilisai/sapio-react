@@ -94,7 +94,7 @@ export default function App() {
     let messages = convo[selectedIcon][tab].messages;
     // Use first prompt as conversation title
     if (messages.length == 1) {
-      convo[selectedIcon][tab].title = prompt.slice(0, 56);
+      convo[selectedIcon][tab].title = prompt.slice(0, 50);
     }
     messages = [...messages, { role: "user", content: prompt }];
     convo[selectedIcon][tab].messages = messages;
@@ -124,8 +124,7 @@ export default function App() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "gpt-3.5-turbo",
-        // model: localStorage.getItem("model"),
+        model: JSON.parse(localStorage.getItem("model")),
         messages: messages,
         max_tokens: Number(localStorage.getItem("max-tokens")),
         temperature: Number(localStorage.getItem("temperature")),

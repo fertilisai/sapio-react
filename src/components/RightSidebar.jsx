@@ -4,9 +4,14 @@ import InputNum from "./InputNum.jsx";
 import InputSelect from "./InputSelect.jsx";
 import { useLocalStorage } from "../hooks/useStorage.js";
 import { useState } from "react";
+import { settings } from "../data/settings.js";
 
 export default function RightSidebar() {
   // Original state from localStorage
+  const [settingsStored, setSettings, removeSettings] = useLocalStorage(
+    "settings",
+    JSON.stringify(settings)
+  );
   const [apiStored, setApi, removeApi] = useLocalStorage("api", "OpenAI");
   const [apiKeyStored, setApiKey, removeApiKey] = useLocalStorage(
     "api-key",
@@ -25,6 +30,7 @@ export default function RightSidebar() {
   const [topPStored, setTopP] = useLocalStorage("top-p", "1");
 
   // Local state for handling changes
+  const [settingsLocal, setSettingsLocal] = useState(settingsStored);
   const [api, setApiLocal] = useState(apiStored);
   const [apiKey, setApiKeyLocal] = useState(apiKeyStored);
   const [model, setModelLocal] = useState(modelStored);
@@ -33,6 +39,7 @@ export default function RightSidebar() {
   const [topP, setTopPLocal] = useState(topPStored);
 
   function saveChanges() {
+    setSettings(settingsLocal);
     setApi(api);
     setApiKey(apiKey);
     setModel(model);
@@ -47,7 +54,7 @@ export default function RightSidebar() {
       <aside className="flex">
         <div className="relative h-screen w-60 overflow-y-auto border-l border-slate-300 bg-slate-50 py-8 dark:border-slate-700 dark:bg-slate-900 sm:w-64">
           <div className="mb-4 flex items-center gap-x-2 px-2 text-slate-800 dark:text-slate-200">
-            <button className="inline-flex rounded-lg p-1 hover:bg-slate-700">
+            {/* <button className="inline-flex rounded-lg p-1 hover:bg-slate-700">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-6 w-6"
@@ -63,11 +70,11 @@ export default function RightSidebar() {
                 <path d="M14 10l2 2l-2 2"></path>
               </svg>
               <span className="sr-only">Close settings sidebar</span>
-            </button>
+            </button> */}
             <h2 className="text-lg font-medium">Settings</h2>
           </div>
 
-          {/* Select */}
+          {/* API */}
           <div className="px-2 py-4 text-slate-800 dark:text-slate-200">
             <InputSelect
               label="API"
@@ -82,7 +89,7 @@ export default function RightSidebar() {
             />
           </div>
 
-          {/* More Settings */}
+          {/* Advanced Settings */}
           <div className="my-4 border-t border-slate-300 px-2 py-4 text-slate-800 dark:border-slate-700 dark:text-slate-200">
             <p className="px-2 text-xs uppercase text-slate-500 dark:text-slate-400">
               Advanced
@@ -91,7 +98,7 @@ export default function RightSidebar() {
             <InputSelect
               label="Model"
               value={model}
-              options={["gpt-3.5-turbo", "gpt-4-turbo", "gpt-4", "gpt-4-32k"]}
+              options={["gpt-3.5-turbo", "gpt-4o", "gpt-4-turbo", "gpt-4"]}
               onChange={(e) => setModelLocal(e.target.value)}
             />
             <InputNum
@@ -118,7 +125,6 @@ export default function RightSidebar() {
               step="0.1"
               onChange={(e) => setTopPLocal(e.target.value)}
             />
-
             <Button label="Save changes" takeAction={saveChanges} />
           </div>
         </div>

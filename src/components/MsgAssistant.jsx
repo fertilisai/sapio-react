@@ -22,11 +22,11 @@ export default function MsgAssistant(props) {
         <div style={{ whiteSpace: "pre-wrap" }}>
           <p className="max-w-3xl">{props.content}</p>
           {/* <div
-            className="content"
-            dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(marked.parse(props.content)),
-            }}
-          ></div> */}
+          className="max-w-3xl"
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(marked.parse(props.content)),
+          }}
+        ></div> */}
         </div>
         <div className="mt-4 flex flex-row justify-start gap-x-2 text-slate-500 lg:mt-0">
           <button

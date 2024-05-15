@@ -11,7 +11,7 @@ export const settings = [
         label: "Model",
         name: "select-model",
         type: "dropdown",
-        value: ["gpt-3.5-turbo", "gpt-4", "gpt-4-32k"],
+        value: ["gpt-3.5-turbo", "gpt-4o", "gpt-4-turbo", "gpt-4"],
       },
       {
         label: "Max tokens",
@@ -75,15 +75,6 @@ export const settings = [
       {
         label: "Top P",
         name: "top-p",
-        type: "number",
-        value: 1,
-        min: 0,
-        max: 1,
-        step: 0.1,
-      },
-      {
-        label: "Top K",
-        name: "top-k",
         type: "number",
         value: 1,
         min: 0,
