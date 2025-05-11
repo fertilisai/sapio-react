@@ -1,15 +1,14 @@
 export default function today() {
-  var today = new Date();
-  var dd = today.getDate();
-  var mm = today.getMonth() + 1;
-  // var yyyy = today.getFullYear();
+  const date = new Date();
+  let dd = date.getDate();
+  let mm = date.getMonth() + 1;
+  
   if (dd < 10) {
     dd = "0" + dd;
   }
   if (mm < 10) {
     mm = "0" + mm;
   }
-  today = mm + "/" + dd;
-  // console.log(today);
-  return today;
+  
+  return `${mm}/${dd}`;
 }

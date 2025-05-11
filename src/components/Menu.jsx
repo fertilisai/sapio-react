@@ -1,14 +1,19 @@
-// import { useState } from "react";
+import React, { memo, useMemo } from "react";
 
-export default function Menu(props) {
-  const unselected =
-    "rounded-lg p-1.5 text-slate-500 transition-colors duration-200 hover:bg-slate-200 focus:outline-none dark:text-slate-400 dark:hover:bg-slate-800";
-  const selected =
-    "rounded-lg bg-blue-100 p-1.5 text-blue-600 transition-colors duration-200 dark:bg-slate-800 dark:text-blue-600";
+function Menu({ selectedIcon, handleSelectIcon }) {
+  // Memoize class names to prevent unnecessary calculations
+  const styles = useMemo(
+    () => ({
+      unselected:
+        "rounded-lg p-1.5 text-slate-500 transition-colors duration-200 hover:bg-slate-200 focus:outline-none dark:text-slate-400 dark:hover:bg-slate-800",
+      selected:
+        "rounded-lg bg-blue-100 p-1.5 text-blue-600 transition-colors duration-200 dark:bg-slate-800 dark:text-blue-600",
+    }),
+    []
+  );
 
   return (
-    <div className="flex h-screen w-12 flex-col items-center space-y-8 border-r border-slate-300 bg-slate-50 py-8 dark:border-slate-700 dark:bg-slate-900 sm:w-16">
-      {/* Logo */}
+    <div className="flex h-screen w-16 flex-none flex-col items-center space-y-8 border-r border-slate-300 bg-slate-50 py-8 dark:border-slate-700 dark:bg-slate-900">
       <a href="#" className="mb-1">
         <svg
           className="h-7 w-7 text-blue-600"
@@ -26,11 +31,14 @@ export default function Menu(props) {
           />
         </svg>
       </a>
-      {/* Chat */}
+
       <a
         href="#"
-        className={props.selectedIcon === "chat" ? selected : unselected}
-        onClick={() => props.handleSelectIcon("chat")}
+        className={
+          selectedIcon === "chat" ? styles.selected : styles.unselected
+        }
+        onClick={() => handleSelectIcon("chat")}
+        aria-label="Conversations"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -47,11 +55,14 @@ export default function Menu(props) {
           <path d="M14 15v2a1 1 0 0 1 -1 1h-7l-3 3v-10a1 1 0 0 1 1 -1h2"></path>
         </svg>
       </a>
-      {/* Image */}
+
       <a
         href="#"
-        className={props.selectedIcon === "image" ? selected : unselected}
-        onClick={() => props.handleSelectIcon("image")}
+        className={
+          selectedIcon === "image" ? styles.selected : styles.unselected
+        }
+        onClick={() => handleSelectIcon("image")}
+        aria-label="Image"
       >
         <svg
           className="w-6 h-6"
@@ -74,11 +85,14 @@ export default function Menu(props) {
           />
         </svg>
       </a>
-      {/* Audio */}
+
       <a
         href="#"
-        className={props.selectedIcon === "audio" ? selected : unselected}
-        onClick={() => props.handleSelectIcon("audio")}
+        className={
+          selectedIcon === "audio" ? styles.selected : styles.unselected
+        }
+        onClick={() => handleSelectIcon("audio")}
+        aria-label="Audio"
       >
         <svg
           className="w-6 h-6"
@@ -95,11 +109,14 @@ export default function Menu(props) {
           />
         </svg>
       </a>
-      {/* Video */}
+
       <a
         href="#"
-        className={props.selectedIcon === "video" ? selected : unselected}
-        onClick={() => props.handleSelectIcon("video")}
+        className={
+          selectedIcon === "video" ? styles.selected : styles.unselected
+        }
+        onClick={() => handleSelectIcon("video")}
+        aria-label="Video"
       >
         <svg
           className="w-6 h-6"
@@ -117,71 +134,8 @@ export default function Menu(props) {
           />
         </svg>
       </a>
-      {/* Doc */}
-      {/* <a
-        href="#"
-        className={props.selectedIcon === "doc" ? selected : unselected}
-        onClick={() => props.handleSelectIcon("doc")}
-      >
-        <svg
-          className="w-6 h-6"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M10 3v4c0 .6-.4 1-1 1H5m4 8h6m-6-4h6m4-8v16c0 .6-.4 1-1 1H6a1 1 0 0 1-1-1V8c0-.4.1-.6.3-.8l4-4 .6-.2H18c.6 0 1 .4 1 1Z"
-          />
-        </svg>
-      </a> */}
-      {/* Agent*/}
-      {/* <a
-        href="#"
-        className={props.selectedIcon === "agent" ? selected : unselected}
-        onClick={() => props.handleSelectIcon("agent")}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-6 w-6"
-          viewBox="0 0 24 24"
-          strokeWidth="2"
-          stroke="currentColor"
-          fill="none"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-          <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
-          <path d="M12 10m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"></path>
-          <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855"></path>
-        </svg>
-      </a> */}
-      {/* Settings */}
-      {/* <a
-        href="#"
-        className={props.selectedIcon === "settings" ? selected : unselected}
-        onClick={() => props.handleSelectIcon("settings")}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-6 w-6"
-          viewBox="0 0 24 24"
-          strokeWidth="2"
-          stroke="currentColor"
-          fill="none"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-          <path d="M19.875 6.27a2.225 2.225 0 0 1 1.125 1.948v7.284c0 .809 -.443 1.555 -1.158 1.948l-6.75 4.27a2.269 2.269 0 0 1 -2.184 0l-6.75 -4.27a2.225 2.225 0 0 1 -1.158 -1.948v-7.285c0 -.809 .443 -1.554 1.158 -1.947l6.75 -3.98a2.33 2.33 0 0 1 2.25 0l6.75 3.98h-.033z"></path>
-          <path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"></path>
-        </svg>
-      </a> */}
     </div>
   );
 }
+
+export default memo(Menu);

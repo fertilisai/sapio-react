@@ -2,23 +2,383 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  
+  /* Drag and Drop related styles */
+  .drag-over {
+    @apply border-2 border-dashed border-blue-500 bg-blue-50 dark:bg-blue-900/20;
+  }
+
+  [draggable="true"] {
+    @apply cursor-grab;
+  }
+
+  [draggable="true"]:active {
+    @apply cursor-grabbing;
+  }
+  
+  /* Animation for drag highlights */
+  @keyframes drag-highlight-pulse {
+    0% { border-color: rgba(59, 130, 246, 0.5); }
+    50% { border-color: rgba(59, 130, 246, 1); }
+    100% { border-color: rgba(59, 130, 246, 0.5); }
+  }
+  
+  .drag-highlight {
+    animation: drag-highlight-pulse 1.5s infinite;
+  }
+
+  /* Allow dotted borders ONLY when mouse button is being held down during drag */
+  body:not(.mouse-down) .border-dashed,
+  body:not(.mouse-down) [data-force-dotted="true"],
+  body:not(.mouse-down) [style*="border-style: dashed"] {
+    border-style: solid !important;
+  }
+  
+  /* Force dotted borders when mouse is down and dragging */
+  body.mouse-down [data-force-dotted="true"].section-container.border-dashed {
+    border-style: dashed !important;
+  }
+  
+  /* Visual styles during dragging */
+  body.is-dragging .section-container {
+    transition: border-color 0.2s, background-color 0.2s;
+  }
+  
+  /* The drag ghost should never show a dotted line */
+  img[data-force-dotted="true"] ~ * {
+    border-style: solid !important;
+  }
+  
+  /* Reset drag states with force redraw */
+  *[data-drag-active="false"] {
+    transform: translateZ(0);
+    transition: opacity 0.01s;
+    border-color: transparent !important;
+    background-color: transparent !important;
+  }
+  
+  /* Clear highlights definitively after drop */
+  .section-container:not([data-drag-over="true"]) {
+    border-color: inherit !important;
+    background-color: inherit !important;
+  }
+  
+  /* Use more targeted selectors for drag operations that won't break the UI */
+  .section-container.drag-reset {
+    background-color: transparent;
+    border-color: inherit;
+    border-style: solid;
+    border-width: 0 0 0 2px;  /* Just keep the left border */
+  }
+  
+  /* Only apply dashed border during actual drag operations */
+  .section-container.drag-over {
+    border-style: dashed;
+    border-width: 2px;
+    border-color: #3b82f6; /* blue-500 */
+  }
+  
+  /* Remove dotted borders after drag */
+  .border-cleanup {
+    border-style: solid !important;
+  }
+  
+  /* Override any drag highlight styles - remove dependency on data-dragging */
+  .force-repaint {
+    animation-name: force-element-repaint;
+    animation-duration: 0.01s;
+    animation-iteration-count: 1;
+  }
+  
+  @keyframes force-element-repaint {
+    0% { opacity: 0.999; }
+    100% { opacity: 1; }
+  }
+}
+
+/* Markdown styling */
+.markdown-content h1 {
+  @apply text-2xl font-bold my-4;
+}
+
+.markdown-content h2 {
+  @apply text-xl font-bold my-3;
+}
+
+.markdown-content h3 {
+  @apply text-lg font-bold my-2;
+}
+
+.markdown-content p {
+  @apply my-2;
+}
+
+.markdown-content pre {
+  @apply bg-slate-200 dark:bg-slate-700 p-4 rounded-md overflow-x-auto my-4;
+}
+
+.markdown-content code {
+  @apply bg-slate-200 dark:bg-slate-700 px-1 py-0.5 rounded-md;
+}
+
+.markdown-content pre code {
+  @apply bg-transparent p-0;
+}
+
+/* Code block with copy button styles */
+.code-block-wrapper {
+  @apply rounded-md overflow-hidden;
+}
+
+.code-block-wrapper pre {
+  @apply m-0 !important;
+}
+
+.code-copy-button {
+  @apply z-10 transition-all duration-200 bg-opacity-80 backdrop-blur-sm;
+}
+
+.code-copy-button:hover {
+  @apply bg-opacity-100 scale-110;
+}
+
+/* Add a border to code blocks */
+.code-block-wrapper pre {
+  @apply border border-slate-300 dark:border-slate-600;
+}
+
+.markdown-content ul {
+  @apply list-disc ml-6 my-2;
+}
+
+.markdown-content ol {
+  @apply list-decimal ml-6 my-2;
+}
+
+.markdown-content a {
+  @apply text-blue-600 hover:underline;
+}
+
+.markdown-content blockquote {
+  @apply border-l-4 border-slate-300 dark:border-slate-600 pl-4 italic my-4;
+}
+
+.markdown-content table {
+  @apply border-collapse w-full my-4;
+}
+
+.markdown-content th, .markdown-content td {
+  @apply border border-slate-300 dark:border-slate-600 px-2 py-1;
+}
+
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--secondary) var(--primary);
 }
 .container-fluid {
   display: flex;
+  overflow-x: hidden; /* Prevent horizontal scrolling during transitions */
+  height: 100vh; /* Ensure the container takes full viewport height */
+  position: relative;
+  width: 100%;
+  background-color: var(--bg-color, white); /* Fallback background color */
 }
+
+/* Default light/dark mode background colors */
+:root {
+  --bg-color: white;
+  --bg-left-sidebar: rgb(248 250 252); /* bg-slate-50 */
+  --bg-right-sidebar: rgb(248 250 252); /* bg-slate-50 */
+  --bg-main: white;
+  --section-border: rgb(203 213 225); /* slate-300 */
+  --section-bg: transparent;
+  --convo-bg: white;
+  --convo-bg-selected: rgb(226 232 240); /* bg-slate-200 */
+}
+
+html.dark {
+  --bg-color: #0f172a; /* Matches dark:bg-slate-900 */
+  --bg-left-sidebar: rgb(15 23 42); /* dark:bg-slate-900 */
+  --bg-right-sidebar: rgb(15 23 42); /* dark:bg-slate-900 */
+  --bg-main: rgb(15 23 42); /* dark:bg-slate-900 */
+  --section-border: rgb(51 65 85); /* slate-700 */
+  --section-bg: transparent;
+  --convo-bg: rgb(15 23 42); /* dark:bg-slate-900 */
+  --convo-bg-selected: rgb(30 41 59); /* dark:bg-slate-800 */
+}
+
+/* Left sidebar */
 .left {
-  flex: 1;
-  width: 400px;
-  flex-shrink: 0;
+  flex: 0 0 auto;
+  width: auto;
+  position: relative;
+  z-index: 10; /* Lower than content to avoid overlapping issues during drag */
+  transform: translateX(0);
+  transition: transform 0.3s ease;
+  background-color: var(--bg-left-sidebar); /* Use CSS variable */
 }
+
+.left-collapsed {
+  transform: translateX(-100%);
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+}
+
+/* Right sidebar */
 .right {
-  flex: 1;
-  flex-shrink: 0;
+  flex: 0 0 auto;
+  width: auto;
+  max-width: 500px; /* Match the max-width of left sidebar */
+  position: relative;
+  z-index: 10; /* Lower than content to avoid overlapping issues during drag */
+  transform: translateX(0);
+  transition: transform 0.3s ease;
+  background-color: var(--bg-right-sidebar); /* Use CSS variable */
 }
+
+.right-collapsed {
+  transform: translateX(100%);
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+}
+
+/* Main content area */
 .main {
-  flex-grow: 5;
-  min-width: 650px;
+  flex: 1;
+  min-width: 320px;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 5; /* Lower z-index than sidebars to ensure content visibility */
+  background-color: var(--bg-main); /* Use CSS variable */
+  min-height: 100vh; /* Ensure it fills the viewport height */
+}
+
+.main-left-expanded {
+  margin-left: 0;
+}
+
+.main-right-expanded {
+  margin-right: 0;
+}
+
+/* Ensure main content transitions smoothly */
+@media (min-width: 769px) {
+  /* Let main content adjust based on left sidebar width */
+  .main {
+    transition: margin-left 0.3s ease;
+  }
+}
+
+/* Responsive behavior - auto-collapse right sidebar first, then left sidebar */
+@media (max-width: 1200px) {
+  /* Position sidebars for absolute positioning */
+  .right {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+  }
+  
+  /* Only translate when collapsed */
+  .right:not(.right-collapsed) {
+    transform: translateX(0);
+  }
+  
+  .right.right-collapsed {
+    transform: translateX(100%);
+    z-index: 40;
+  }
+  
+  /* Ensure main content takes available space when right sidebar is open */
+  .main {
+    margin-right: 0;
+  }
+  
+  /* Allow main to adjust when right sidebar is open */
+  .right:not(.right-collapsed) + .main {
+    margin-right: 0;
+    width: calc(100% - 60px);
+  }
+}
+
+@media (max-width: 768px) {
+  /* Position both sidebars for absolute positioning */
+  .left, .right {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    z-index: 40;
+  }
+  
+  .left {
+    left: 0;
+  }
+  
+  .right {
+    right: 0;
+  }
+  
+  /* Translate sidebars based on their state */
+  .left:not(.left-collapsed) {
+    transform: translateX(0);
+  }
+  
+  .left.left-collapsed {
+    transform: translateX(-100%);
+  }
+  
+  .right:not(.right-collapsed) {
+    transform: translateX(0);
+  }
+  
+  .right.right-collapsed {
+    transform: translateX(100%);
+  }
+  
+  /* Ensure main content takes full width */
+  .main {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  
+  /* When sidebars are open, they overlay the content */
+  .left:not(.left-collapsed), .right:not(.right-collapsed) {
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  }
+}
+
+/* Emergency reset for when UI becomes invisible - can be triggered by JavaScript */
+.reset-display {
+  background-color: var(--bg-color) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  color: initial !important;
+  display: flex !important;
+  position: static !important;
+  z-index: auto !important;
+  transform: none !important;
+}
+
+.reset-display * {
+  visibility: visible !important;
+  opacity: 1 !important;
+  z-index: auto !important;
+  position: static !important;
+  display: block !important;
 }

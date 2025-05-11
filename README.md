@@ -62,8 +62,12 @@ Why not just using ChatGPT instead?
 
 ## Roadmap
 
-- [ ] Markdown support
-- [ ] Code highlighting
+- [x] Markdown support & syntax highlighting
+- [x] Drag and drop Conversations & Sections
+- [x] OpenRouter
+- [x] TTS (Text to Speech) & STT (Speech to Text)
+- [x] Stream responses
+- [ ] Local LLMs (Llama, Mistral, etc.)
 - [ ] Adding modalities (image, audio, video)
 
 <!-- ACKNOWLEDGEMENT -->

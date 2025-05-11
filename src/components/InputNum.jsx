@@ -1,9 +1,9 @@
 export default function InputNum(props) {
   return (
-    <>
+    <div className="w-full">
       <label
         htmlFor={props.label.replace(/\W+/g, "-").toLowerCase()}
-        className="mb-2 mt-4 block px-2 text-sm font-medium"
+        className="mb-2 mt-4 block px-2 text-sm font-medium text-slate-700 dark:text-slate-300"
       >
         {props.label}
       </label>
@@ -18,6 +18,6 @@ export default function InputNum(props) {
         step={props.step}
         onChange={props.onChange}
       />
-    </>
+    </div>
   );
 }
