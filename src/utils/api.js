@@ -119,18 +119,12 @@ export async function sendRequest(messages, config) {
       throw new Error(`Unsupported API provider: ${provider.name}`);
   }
   
-  // If streamingText is enabled and we're using OpenAI, stream the response as audio
-  if (streamingText && (provider.id === "openai" || provider.id === "openrouter") && audioPlayer.initialized) {
+  // If streamingText is enabled and we're using a compatible provider, stream the response as audio
+  if (streamingText && provider && (provider.id === "openai" || provider.id === "openrouter") && audioPlayer.initialized) {
     try {
-      // Try to split the text into sentences for better streaming
-      const sentences = response.match(/[^.!?]+[.!?]+/g) || [response];
-      
-      for (const sentence of sentences) {
-        if (sentence.trim()) {
-          const audioData = await textToSpeech(sentence.trim(), apiKey);
-          audioPlayer.addToQueue(audioData);
-        }
-      }
+      // Only send one audio response to prevent duplicate responses
+      const audioData = await textToSpeech(response.trim(), apiKey);
+      audioPlayer.addToQueue(audioData);
     } catch (error) {
       console.error("Error streaming text response:", error);
       // Continue even if TTS fails - the text response will still be shown
@@ -220,10 +214,12 @@ export async function generateImages(params, apiKey) {
             const sample = item.b64_json.substring(0, 20);
             console.log(`Image ${index}: b64_json sample: ${sample}...`);
 
-            // Check if the b64_json already has a data URL prefix, if so, return it directly
+            // Check if the b64_json already has a data URL prefix, if so, strip it
             if (item.b64_json.startsWith('data:')) {
-              console.log(`Image ${index}: b64_json already has data URL prefix`);
-              return { b64_json: item.b64_json };
+              console.log(`Image ${index}: b64_json already has data URL prefix, stripping it`);
+              // Extract just the base64 part
+              const base64Part = item.b64_json.split(',')[1];
+              return { b64_json: base64Part };
             }
 
             // Try converting to verify if it's valid
@@ -235,8 +231,8 @@ export async function generateImages(params, apiKey) {
               // Check if it starts with valid base64 pattern
               if (/^[A-Za-z0-9+/]/.test(item.b64_json)) {
                 console.log(`Image ${index}: Valid base64 data confirmed`);
-                // For better display, directly return as a data URL
-                return { b64_json: `data:image/png;base64,${item.b64_json}` };
+                // Return the raw base64 data wrapped in an object
+                return { b64_json: item.b64_json };
               } else {
                 console.error(`Image ${index}: Invalid b64_json format, doesn't match base64 pattern`);
                 return null;

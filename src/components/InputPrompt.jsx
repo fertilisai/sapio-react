@@ -21,11 +21,11 @@ export default function InputPrompt({ onNewPrompt, apiKey, api, streamingAudio, 
   const audioQueueRef = useRef([]);
   const inputRef = useRef(null);
   
-  // Check if OpenAI API is being used
-  const isOpenAI = api === "openai" && apiKey;
-  
-  // Check if audio recording should be available - only for OpenAI provider
-  const showAudioRecording = isOpenAI && streamingAudio;
+  // Check if a compatible API is being used (only OpenAI)
+  const isCompatibleProvider = (api === "openai") && apiKey;
+
+  // Check if audio recording should be available - for compatible providers
+  const showAudioRecording = isCompatibleProvider && streamingAudio;
   
   // Extract user messages from conversation history and update promptHistory
   useEffect(() => {
@@ -271,24 +271,25 @@ export default function InputPrompt({ onNewPrompt, apiKey, api, streamingAudio, 
       console.warn("Missing audioBlob or API key");
       return;
     }
-    
+
     if (audioBlob.size < 100) {
       console.warn("Audio blob too small, likely no audio recorded");
       alert("No audio detected. Please try again.");
       return;
     }
-    
+
     try {
-      console.log("Sending audio to Whisper API...");
-      
+      console.log(`Sending audio to Whisper API using ${api} provider...`);
+
       // Create form data with audio file
       const formData = new FormData();
       formData.append("file", audioBlob, "recording.webm");
       formData.append("model", "whisper-1");
       formData.append("language", "en"); // Specify language for better results
       formData.append("response_format", "json");
-      
-      // Send to OpenAI Whisper API
+
+      // Always use OpenAI's Whisper API endpoint regardless of provider
+      // Both OpenAI and OpenRouter keys should work with OpenAI's Whisper endpoint
       const response = await fetch("https://api.openai.com/v1/audio/transcriptions", {
         method: "POST",
         headers: {
@@ -296,11 +297,11 @@ export default function InputPrompt({ onNewPrompt, apiKey, api, streamingAudio, 
         },
         body: formData
       });
-      
+
       if (!response.ok) {
         const errorText = await response.text();
         let errorMessage = `API error: ${response.status}`;
-        
+
         try {
           const errorJson = JSON.parse(errorText);
           errorMessage = errorJson.error?.message || errorMessage;
@@ -308,13 +309,13 @@ export default function InputPrompt({ onNewPrompt, apiKey, api, streamingAudio, 
           // If JSON parsing fails, use the raw text
           errorMessage = errorText || errorMessage;
         }
-        
+
         throw new Error(errorMessage);
       }
-      
+
       const data = await response.json();
       console.log("Whisper API response:", data);
-      
+
       if (data.text) {
         setPrompt(data.text.trim());
       } else {
@@ -365,15 +366,15 @@ export default function InputPrompt({ onNewPrompt, apiKey, api, streamingAudio, 
   
   // Handle text-to-speech streaming
   const streamText = async (text) => {
-    // Only stream for OpenAI API
-    if (!isStreaming || !streamingText || !apiKey || api !== "openai") {
+    // Stream for compatible providers (OpenAI or OpenRouter)
+    if (!isStreaming || !streamingText || !apiKey || (api !== "openai" && api !== "openrouter")) {
       return;
     }
-    
+
     try {
       // Split text into sentences for more natural streaming
       const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
-      
+
       for (const sentence of sentences) {
         if (sentence.trim()) {
           const audioData = await textToSpeech(sentence.trim(), apiKey);
@@ -475,89 +476,93 @@ export default function InputPrompt({ onNewPrompt, apiKey, api, streamingAudio, 
           onKeyDown={handleKeyDown}
         />
         
-        {/* Always show the microphone button, but gray it out if unavailable */}
-        <div>
-          <button
-            type="button"
-            onClick={showAudioRecording ? toggleRecording : undefined}
-            className={`mr-2 ${
-              showAudioRecording 
-                ? `${isRecording ? "text-red-600 dark:text-red-400" : "hover:text-blue-600 dark:text-slate-200 dark:hover:text-blue-600"}`
-                : "text-slate-400 dark:text-slate-600 cursor-not-allowed opacity-50"
-            } sm:p-2`}
-            aria-label={isRecording ? "Stop recording" : "Start recording"}
-            disabled={isStreaming || !showAudioRecording}
-            title={!showAudioRecording ? "Voice recording requires OpenAI provider" : ""}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              aria-hidden="true"
-              viewBox="0 0 24 24"
-              strokeWidth="2"
-              stroke="currentColor"
-              fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+        {/* Only show the microphone button when provider is OpenAI */}
+        {api === "openai" && (
+          <div>
+            <button
+              type="button"
+              onClick={showAudioRecording ? toggleRecording : undefined}
+              className={`mr-2 ${
+                showAudioRecording
+                  ? `${isRecording ? "text-red-600 dark:text-red-400" : "hover:text-blue-600 dark:text-slate-200 dark:hover:text-blue-600"}`
+                  : "text-slate-400 dark:text-slate-600 cursor-not-allowed opacity-50"
+              } sm:p-2`}
+              aria-label={isRecording ? "Stop recording" : "Start recording"}
+              disabled={isStreaming || !showAudioRecording}
+              title={!showAudioRecording ? "Voice recording requires OpenAI provider" : ""}
             >
-              {isRecording ? (
-                // Stop icon
-                <>
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                  <path d="M8 8h8v8h-8z"></path>
-                </>
-              ) : (
-                // Microphone icon
-                <>
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                  <path d="M9 2m0 3a3 3 0 0 1 3 -3h0a3 3 0 0 1 3 3v5a3 3 0 0 1 -3 3h0a3 3 0 0 1 -3 -3z"></path>
-                  <path d="M5 10a7 7 0 0 0 14 0"></path>
-                  <path d="M8 21l8 0"></path>
-                  <path d="M12 17l0 4"></path>
-                </>
-              )}
-            </svg>
-            <span className="sr-only">
-              {isRecording ? "Stop recording" : "Start recording"}
-            </span>
-          </button>
-        </div>
-        
-        {/* Always show the speaker button, but gray it out if unavailable */}
-        <div>
-          <button
-            type="button"
-            onClick={showAudioRecording && streamingText ? () => setIsStreaming(!isStreaming) : undefined}
-            className={`mr-2 ${
-              showAudioRecording && streamingText
-                ? `${isStreaming ? "text-blue-600 dark:text-blue-400" : "hover:text-blue-600 dark:text-slate-200 dark:hover:text-blue-600"}`
-                : "text-slate-400 dark:text-slate-600 cursor-not-allowed opacity-50"
-            } sm:p-2`}
-            aria-label={isStreaming ? "Stop streaming audio" : "Stream response as audio"}
-            disabled={isRecording || !showAudioRecording || !streamingText}
-            title={!showAudioRecording ? "Voice streaming requires OpenAI provider" : (!streamingText ? "Enable streaming text in settings" : "")}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              aria-hidden="true"
-              viewBox="0 0 24 24"
-              strokeWidth="2"
-              stroke="currentColor"
-              fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                strokeWidth="2"
+                stroke="currentColor"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                {isRecording ? (
+                  // Stop icon
+                  <>
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <path d="M8 8h8v8h-8z"></path>
+                  </>
+                ) : (
+                  // Microphone icon
+                  <>
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <path d="M9 2m0 3a3 3 0 0 1 3 -3h0a3 3 0 0 1 3 3v5a3 3 0 0 1 -3 3h0a3 3 0 0 1 -3 -3z"></path>
+                    <path d="M5 10a7 7 0 0 0 14 0"></path>
+                    <path d="M8 21l8 0"></path>
+                    <path d="M12 17l0 4"></path>
+                  </>
+                )}
+              </svg>
+              <span className="sr-only">
+                {isRecording ? "Stop recording" : "Start recording"}
+              </span>
+            </button>
+          </div>
+        )}
+
+        {/* Only show the speaker button when provider is OpenAI */}
+        {api === "openai" && (
+          <div>
+            <button
+              type="button"
+              onClick={showAudioRecording && streamingText ? () => setIsStreaming(!isStreaming) : undefined}
+              className={`mr-2 ${
+                showAudioRecording && streamingText
+                  ? `${isStreaming ? "text-blue-600 dark:text-blue-400" : "hover:text-blue-600 dark:text-slate-200 dark:hover:text-blue-600"}`
+                  : "text-slate-400 dark:text-slate-600 cursor-not-allowed opacity-50"
+              } sm:p-2`}
+              aria-label={isStreaming ? "Stop streaming audio" : "Stream response as audio"}
+              disabled={isRecording || !showAudioRecording || !streamingText}
+              title={!showAudioRecording ? "Voice streaming requires OpenAI provider" : (!streamingText ? "Enable streaming text in settings" : "")}
             >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-              <path d="M15 8a5 5 0 0 1 0 8"></path>
-              <path d="M17.7 5a9 9 0 0 1 0 14"></path>
-              <path d="M6 15h-2a1 1 0 0 1 -1 -1v-4a1 1 0 0 1 1 -1h2l3.5 -4.5a.8 .8 0 0 1 1.5 .5v14a.8 .8 0 0 1 -1.5 .5l-3.5 -4.5"></path>
-            </svg>
-            <span className="sr-only">
-              {isStreaming ? "Stop streaming audio" : "Stream response as audio"}
-            </span>
-          </button>
-        </div>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                strokeWidth="2"
+                stroke="currentColor"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M15 8a5 5 0 0 1 0 8"></path>
+                <path d="M17.7 5a9 9 0 0 1 0 14"></path>
+                <path d="M6 15h-2a1 1 0 0 1 -1 -1v-4a1 1 0 0 1 1 -1h2l3.5 -4.5a.8 .8 0 0 1 1.5 .5v14a.8 .8 0 0 1 -1.5 .5l-3.5 -4.5"></path>
+              </svg>
+              <span className="sr-only">
+                {isStreaming ? "Stop streaming audio" : "Stream response as audio"}
+              </span>
+            </button>
+          </div>
+        )}
         <div>
           <button
             className="inline-flex hover:text-blue-600 dark:text-slate-200 dark:hover:text-blue-600 sm:p-2"

@@ -6,7 +6,7 @@ import ErrorBoundary from "./ErrorBoundary.jsx";
 // Use the github dark theme for better visibility
 import "highlight.js/styles/github-dark.css";
 
-export default function MsgAssistant({ content, isStreaming = false, isError = false, images = null, imagePrompt = null }) {
+export default function MsgAssistant({ content, isStreaming = false, isError = false, images = null, imagePrompt = null, context = "chat" }) {
   const [parsedContent, setParsedContent] = useState("");
   const [processedImages, setProcessedImages] = useState([]);
   const blobUrlsRef = useRef([]);
@@ -393,29 +393,33 @@ export default function MsgAssistant({ content, isStreaming = false, isError = f
             </div>
           )}
         </div>
-        <div className="mt-4 flex flex-row justify-start gap-x-2 text-slate-500 lg:mt-0">
-          <button
-            className="hover:text-blue-600"
-            type="button"
-            onClick={copyToClipboard}
-            title="Copy to clipboard"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              viewBox="0 0 24 24"
-              strokeWidth="2"
-              stroke="currentColor"
-              fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+        
+        {/* Only show copy button if not in image context */}
+        {context !== "image" && (
+          <div className="mt-4 flex flex-row justify-start gap-x-2 text-slate-500 lg:mt-0">
+            <button
+              className="hover:text-blue-600"
+              type="button"
+              onClick={copyToClipboard}
+              title="Copy to clipboard"
             >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-              <path d="M8 8m0 2a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2z"></path>
-              <path d="M16 8v-2a2 2 0 0 0 -2 -2h-8a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h2"></path>
-            </svg>
-          </button>
-        </div>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                viewBox="0 0 24 24"
+                strokeWidth="2"
+                stroke="currentColor"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M8 8m0 2a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2z"></path>
+                <path d="M16 8v-2a2 2 0 0 0 -2 -2h-8a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h2"></path>
+              </svg>
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

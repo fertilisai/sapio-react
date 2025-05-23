@@ -479,53 +479,9 @@ export default function RightSidebar({
                   </span>
                 </p>
                 
-                {/* Provider-specific streaming options */}
-                <div className={!["openai", "openrouter"].includes(apiLocal) ? "opacity-50" : ""}>
-                  <ToggleSwitch
-                    id="streamingAudio"
-                    label={
-                      <>
-                        Voice Transcription
-                        {!["openai", "openrouter"].includes(apiLocal) && (
-                          <span className="ml-2 text-xs text-orange-600 dark:text-orange-400">
-                            (OpenAI/OpenRouter only)
-                          </span>
-                        )}
-                      </>
-                    }
-                    checked={streamingAudioLocal}
-                    onChange={() => {
-                      if (["openai", "openrouter"].includes(apiLocal)) {
-                        setStreamingAudioLocal(!streamingAudioLocal);
-                      }
-                    }}
-                    disabled={!["openai", "openrouter"].includes(apiLocal)}
-                  />
-
-                  <ToggleSwitch
-                    id="streamingText"
-                    label={
-                      <>
-                        Streaming Audio Response
-                        {!["openai", "openrouter"].includes(apiLocal) && (
-                          <span className="ml-2 text-xs text-orange-600 dark:text-orange-400">
-                            (OpenAI/OpenRouter only)
-                          </span>
-                        )}
-                      </>
-                    }
-                    checked={streamingTextLocal}
-                    onChange={() => {
-                      if (["openai", "openrouter"].includes(apiLocal)) {
-                        setStreamingTextLocal(!streamingTextLocal);
-                      }
-                    }}
-                    disabled={!["openai", "openrouter"].includes(apiLocal)}
-                  />
-                </div>
                 
                 {/* Streaming response option (available for supported providers) */}
-                <div className="mt-4 pt-2 border-t border-slate-200 dark:border-slate-700">
+                <div>
                   <ToggleSwitch
                     id="streamingResponse"
                     label={

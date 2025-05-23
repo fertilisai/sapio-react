@@ -24,7 +24,7 @@ export const AI_PROVIDERS = [
     apiKeyPrefix: "sk-or-",
     apiConsoleUrl: "https://openrouter.ai/keys",
     apiConsoleName: "OpenRouter dashboard",
-    badgeColor: "blueorange",
+    badgeColor: "blue",
     defaultModel: "openai/gpt-4o",
     supportsStreaming: true, // Supports streaming via OpenAI-compatible API
   },
@@ -109,6 +109,30 @@ export const AI_MODELS = {
   ],
 };
 
+// Define image generation models
+export const IMAGE_MODELS = {
+  openai: [
+    {
+      id: "dall-e-3",
+      name: "DALL-E 3",
+      description: "Latest DALL-E model with best quality and detail",
+      sizes: ["1024x1024", "1024x1792", "1792x1024"],
+      qualities: ["standard", "hd"],
+      styles: ["vivid", "natural"],
+      maxImages: 1
+    },
+    {
+      id: "dall-e-2",
+      name: "DALL-E 2",
+      description: "Previous generation DALL-E model",
+      sizes: ["256x256", "512x512", "1024x1024"],
+      qualities: ["standard"],
+      styles: [],
+      maxImages: 10
+    }
+  ]
+};
+
 // Helper function to get provider object by ID
 export const getProviderById = (providerId) => {
   return (
@@ -120,6 +144,11 @@ export const getProviderById = (providerId) => {
 // Helper function to get models for a specific provider
 export const getModelsByProviderId = (providerId) => {
   return AI_MODELS[providerId] || [];
+};
+
+// Helper function to get image models for a specific provider
+export const getImageModelsByProviderId = (providerId) => {
+  return IMAGE_MODELS[providerId] || [];
 };
 
 // Helper function to get model names for dropdown options
@@ -137,4 +166,13 @@ export const DEFAULT_SETTINGS = {
   streamingAudio: false,
   streamingText: true,
   streamingResponse: true, // Enable streaming responses by default for supported providers
+};
+
+// Default image generation settings
+export const DEFAULT_IMAGE_SETTINGS = {
+  model: "dall-e-3",
+  size: "1024x1024",
+  quality: "standard",
+  style: "vivid",
+  numberOfImages: 1
 };

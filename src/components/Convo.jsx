@@ -208,7 +208,7 @@ export default function Convo({
 
                   if (!imageResults) {
                     console.error("parseImageResults returned null");
-                    return <MsgAssistant content={"The image generation was successful, but there was an error processing the result."} key={key} isError={true} />;
+                    return <MsgAssistant content={"The image generation was successful, but there was an error processing the result."} key={key} isError={true} context={context} />;
                   }
 
                   console.log("Parsed image results, prompt:", imageResults.prompt);
@@ -228,6 +228,7 @@ export default function Convo({
                           content=""  // Empty content for images
                           images={validImages}
                           imagePrompt={imageResults.prompt}
+                          context={context}
                         />
                       </ErrorBoundary>
                     );
@@ -239,6 +240,7 @@ export default function Convo({
                         content={"The image generation was successful, but no valid images were found."}
                         key={key}
                         isError={true}
+                        context={context}
                       />
                     );
                   }
@@ -250,11 +252,12 @@ export default function Convo({
                       content={"Error displaying image results: " + (error.message || "Unknown error")}
                       key={key}
                       isError={true}
+                      context={context}
                     />
                   );
                 }
               }
-              return <MsgAssistant content={el.content} key={key} />;
+              return <MsgAssistant content={el.content} key={key} context={context} />;
             }
 
             return null;
@@ -262,15 +265,15 @@ export default function Convo({
 
           {/* Only show streaming content when actively loading and we have content */}
           {loading && streamingResponse && streamingResult ? (
-            <MsgAssistant content={streamingResult} isStreaming={true} />
+            <MsgAssistant content={streamingResult} isStreaming={true} context={context} />
           ) : loading && (!streamingResponse || !streamingResult) ? (
-            <MsgAssistant content="..." />
+            <MsgAssistant content="..." context={context} />
           ) : null}
           {!loading && context === "chat" && chatError && (
-            <MsgAssistant content={`**Error:** ${chatError}`} isError={true} />
+            <MsgAssistant content={`**Error:** ${chatError}`} isError={true} context={context} />
           )}
           {!loading && context === "image" && imageError && (
-            <MsgAssistant content={`**Error:** ${imageError}`} isError={true} />
+            <MsgAssistant content={`**Error:** ${imageError}`} isError={true} context={context} />
           )}
           <div ref={messagesEndRef} />
         </div>
